@@ -28,29 +28,90 @@ export class CatAnimator {
    * Create a new cat with random properties
    */
   createCat(width, height, speed, size) {
-    const directions = ["left-to-right", "right-to-left", "top-to-bottom"];
+    const directions = [
+      "left-to-right",
+      "right-to-left",
+      "top-to-bottom",
+      "diagonal-down-right",
+      "diagonal-down-left",
+      "center-cross-left",
+      "center-cross-right",
+      "center-bounce",
+    ];
     const direction = directions[Math.floor(Math.random() * directions.length)];
 
     let startX, startY, targetX, targetY;
+    const centerX = width / 2;
+    const centerY = height / 2;
 
     switch (direction) {
       case "left-to-right":
         startX = -size;
-        startY = Math.random() * (height - size);
+        startY = centerY + (Math.random() - 0.5) * (height * 0.6); // More center-focused
         targetX = width + size;
-        targetY = startY + (Math.random() - 0.5) * 100;
+        targetY = centerY + (Math.random() - 0.5) * (height * 0.4);
         break;
       case "right-to-left":
         startX = width + size;
-        startY = Math.random() * (height - size);
+        startY = centerY + (Math.random() - 0.5) * (height * 0.6);
         targetX = -size;
-        targetY = startY + (Math.random() - 0.5) * 100;
+        targetY = centerY + (Math.random() - 0.5) * (height * 0.4);
         break;
       case "top-to-bottom":
-        startX = Math.random() * (width - size);
+        startX = centerX + (Math.random() - 0.5) * (width * 0.6);
         startY = -size;
-        targetX = startX + (Math.random() - 0.5) * 200;
+        targetX = centerX + (Math.random() - 0.5) * (width * 0.4);
         targetY = height + size;
+        break;
+      case "diagonal-down-right":
+        startX = -size;
+        startY = Math.random() * (height * 0.3); // Start from top area
+        targetX = width + size;
+        targetY = height * 0.7 + Math.random() * (height * 0.3); // End in bottom area
+        break;
+      case "diagonal-down-left":
+        startX = width + size;
+        startY = Math.random() * (height * 0.3);
+        targetX = -size;
+        targetY = height * 0.7 + Math.random() * (height * 0.3);
+        break;
+      case "center-cross-left":
+        // Start from right side, move through center to left
+        startX = width + size;
+        startY = centerY + (Math.random() - 0.5) * (height * 0.3);
+        targetX = -size;
+        targetY = centerY + (Math.random() - 0.5) * (height * 0.3);
+        break;
+      case "center-cross-right":
+        // Start from left side, move through center to right
+        startX = -size;
+        startY = centerY + (Math.random() - 0.5) * (height * 0.3);
+        targetX = width + size;
+        targetY = centerY + (Math.random() - 0.5) * (height * 0.3);
+        break;
+      case "center-bounce":
+        // Start from center, move to a corner
+        startX = centerX + (Math.random() - 0.5) * (width * 0.2);
+        startY = centerY + (Math.random() - 0.5) * (height * 0.2);
+        const corner = Math.floor(Math.random() * 4);
+        switch (corner) {
+          case 0:
+            targetX = -size;
+            targetY = -size;
+            break; // top-left
+          case 1:
+            targetX = width + size;
+            targetY = -size;
+            break; // top-right
+          case 2:
+            targetX = -size;
+            targetY = height + size;
+            break; // bottom-left
+          case 3:
+            targetX = width + size;
+            targetY = height + size;
+            break; // bottom-right
+        }
         break;
     }
 
@@ -76,6 +137,9 @@ export class CatAnimator {
       isPersistent: this.alwaysVisible,
     };
 
+    console.log(
+      `[Cat Animator] Created cat moving ${direction}, speed: ${cat.speed}, size: ${size}`
+    );
     return cat;
   }
 
@@ -99,7 +163,7 @@ export class CatAnimator {
    * Set whether cats should always be visible
    */
   setAlwaysVisible(alwaysVisible) {
-    console.log('[Cat Animator] Setting always visible:', alwaysVisible);
+    console.log("[Cat Animator] Setting always visible:", alwaysVisible);
     this.alwaysVisible = alwaysVisible;
 
     // Update existing cats
@@ -116,19 +180,26 @@ export class CatAnimator {
 
     // If enabling always visible and we don't have enough cats, spawn some immediately
     if (alwaysVisible && this.cats.length < this.minCats) {
-      console.log('[Cat Animator] Spawning initial cats...');
+      console.log(
+        "[Cat Animator] Spawning initial cats, current count:",
+        this.cats.length
+      );
       // Spawn initial cats immediately
       for (let i = this.cats.length; i < this.minCats; i++) {
-        this.spawnRandomCat(640, 480); // Default size, will be updated with actual dimensions
+        console.log("[Cat Animator] Spawning initial cat", i + 1);
+        this.spawnRandomCat(640, 480, 50, 30); // Use better default values
       }
-      console.log('[Cat Animator] Initial cats spawned, total:', this.cats.length);
+      console.log(
+        "[Cat Animator] Initial cats spawned, new count:",
+        this.cats.length
+      );
     }
   }
 
   /**
    * Update cat positions and animations
    */
-  updateCats(width, height, deltaTime) {
+  updateCats(width, height, deltaTime, speed, size) {
     // Remove old cats (but not persistent ones)
     const initialCount = this.cats.length;
     this.cats = this.cats.filter(
@@ -137,8 +208,10 @@ export class CatAnimator {
 
     // For always visible mode, ensure we have minimum cats
     if (this.alwaysVisible && this.cats.length < this.minCats) {
-      console.log(`[Cat Animator] Need more cats! Current: ${this.cats.length}, Min: ${this.minCats}`);
-      this.spawnRandomCat(width, height);
+      console.log(
+        `[Cat Animator] Need more cats! Current: ${this.cats.length}, Min: ${this.minCats}`
+      );
+      this.spawnRandomCat(width, height, speed, size);
     }
 
     // Spawn new cats based on timing
@@ -147,12 +220,16 @@ export class CatAnimator {
       now - this.lastSpawn > this.spawnInterval &&
       this.cats.length < this.maxCats
     ) {
-      this.spawnRandomCat(width, height);
+      this.spawnRandomCat(width, height, speed, size);
       this.lastSpawn = now;
     }
 
-    // Update existing cats
+    // Update existing cats with new speed and size parameters
     this.cats.forEach((cat) => {
+      // Update cat properties with current UI values
+      if (speed) cat.speed = speed / 100; // Convert UI speed to movement speed
+      if (size) cat.size = size;
+
       this.updateCat(cat, deltaTime, width, height);
     });
   }
@@ -161,10 +238,14 @@ export class CatAnimator {
    * Spawn a random cat
    */
   spawnRandomCat(width, height, speed = 50, size = 30) {
-    console.log(`[Cat Animator] Spawning cat at ${width}x${height}, speed:${speed}, size:${size}`);
+    console.log(
+      `[Cat Animator] Spawning cat at ${width}x${height}, speed:${speed}, size:${size}`
+    );
     const cat = this.createCat(width, height, speed, size);
     this.cats.push(cat);
-    console.log(`[Cat Animator] Cat spawned! Total cats: ${this.cats.length}, Cat position: (${cat.x}, ${cat.y})`);
+    console.log(
+      `[Cat Animator] Cat spawned! Total cats: ${this.cats.length}, Cat position: (${cat.x}, ${cat.y})`
+    );
   }
 
   /**
@@ -173,13 +254,15 @@ export class CatAnimator {
   updateCat(cat, deltaTime, width, height) {
     cat.age += deltaTime;
 
-    // Calculate movement
+    // Calculate movement with improved speed
     const progress = cat.isPersistent ? 0 : Math.min(cat.age / cat.maxAge, 1);
     const dx = cat.targetX - cat.x;
     const dy = cat.targetY - cat.y;
 
-    cat.x += dx * cat.speed * (deltaTime / 16);
-    cat.y += dy * cat.speed * (deltaTime / 16);
+    // Improved movement calculation - more responsive to speed changes
+    const moveSpeed = cat.speed * 0.5; // Increase base movement multiplier
+    cat.x += dx * moveSpeed * (deltaTime / 16);
+    cat.y += dy * moveSpeed * (deltaTime / 16);
 
     // Check if persistent cat has reached the edge and needs to respawn
     if (cat.isPersistent) {
@@ -213,30 +296,88 @@ export class CatAnimator {
    * Respawn a persistent cat with new random position and direction
    */
   respawnCat(cat, width, height) {
-    const directions = ["left-to-right", "right-to-left", "top-to-bottom"];
+    const directions = [
+      "left-to-right",
+      "right-to-left",
+      "top-to-bottom",
+      "diagonal-down-right",
+      "diagonal-down-left",
+      "center-cross-left",
+      "center-cross-right",
+      "center-bounce",
+    ];
     const direction = directions[Math.floor(Math.random() * directions.length)];
 
     let startX, startY, targetX, targetY;
     const size = cat.size;
+    const centerX = width / 2;
+    const centerY = height / 2;
 
     switch (direction) {
       case "left-to-right":
         startX = -size;
-        startY = Math.random() * (height - size);
+        startY = centerY + (Math.random() - 0.5) * (height * 0.6);
         targetX = width + size;
-        targetY = startY + (Math.random() - 0.5) * 100;
+        targetY = centerY + (Math.random() - 0.5) * (height * 0.4);
         break;
       case "right-to-left":
         startX = width + size;
-        startY = Math.random() * (height - size);
+        startY = centerY + (Math.random() - 0.5) * (height * 0.6);
         targetX = -size;
-        targetY = startY + (Math.random() - 0.5) * 100;
+        targetY = centerY + (Math.random() - 0.5) * (height * 0.4);
         break;
       case "top-to-bottom":
-        startX = Math.random() * (width - size);
+        startX = centerX + (Math.random() - 0.5) * (width * 0.6);
         startY = -size;
-        targetX = startX + (Math.random() - 0.5) * 200;
+        targetX = centerX + (Math.random() - 0.5) * (width * 0.4);
         targetY = height + size;
+        break;
+      case "diagonal-down-right":
+        startX = -size;
+        startY = Math.random() * (height * 0.3);
+        targetX = width + size;
+        targetY = height * 0.7 + Math.random() * (height * 0.3);
+        break;
+      case "diagonal-down-left":
+        startX = width + size;
+        startY = Math.random() * (height * 0.3);
+        targetX = -size;
+        targetY = height * 0.7 + Math.random() * (height * 0.3);
+        break;
+      case "center-cross-left":
+        startX = width + size;
+        startY = centerY + (Math.random() - 0.5) * (height * 0.3);
+        targetX = -size;
+        targetY = centerY + (Math.random() - 0.5) * (height * 0.3);
+        break;
+      case "center-cross-right":
+        startX = -size;
+        startY = centerY + (Math.random() - 0.5) * (height * 0.3);
+        targetX = width + size;
+        targetY = centerY + (Math.random() - 0.5) * (height * 0.3);
+        break;
+      case "center-bounce":
+        startX = centerX + (Math.random() - 0.5) * (width * 0.2);
+        startY = centerY + (Math.random() - 0.5) * (height * 0.2);
+        const corner = Math.floor(Math.random() * 4);
+        switch (corner) {
+          case 0:
+            targetX = -size;
+            targetY = -size;
+            break;
+          case 1:
+            targetX = width + size;
+            targetY = -size;
+            break;
+          case 2:
+            targetX = -size;
+            targetY = height + size;
+            break;
+          case 3:
+            targetX = width + size;
+            targetY = height + size;
+            break;
+        }
         break;
     }
 
@@ -256,15 +397,12 @@ export class CatAnimator {
    */
   drawCats(ctx, width, height) {
     if (this.cats.length === 0) {
-      console.log('[Cat Animator] No cats to draw!');
       return;
     }
 
-    console.log(`[Cat Animator] Drawing ${this.cats.length} cats`);
     ctx.save();
 
     this.cats.forEach((cat, index) => {
-      console.log(`[Cat Animator] Drawing cat ${index} at (${Math.round(cat.x)}, ${Math.round(cat.y)}), size: ${cat.size}, opacity: ${cat.opacity}`);
       this.drawCat(ctx, cat);
     });
 

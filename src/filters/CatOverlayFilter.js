@@ -17,12 +17,10 @@ export class CatOverlayFilter extends BaseFilter {
 
     // Initialize cat animator if needed
     if (!this.isInitialized) {
-      console.log('[Cat Filter] Initializing cat animator...');
       catAnimator.initialize();
       catAnimator.setAlwaysVisible(true); // Enable always visible mode
       this.isInitialized = true;
       this.lastFrameTime = Date.now();
-      console.log('[Cat Filter] Cat animator initialized, cats count:', catAnimator.getCatCount());
     }
 
     // Calculate delta time for smooth animation
@@ -30,31 +28,13 @@ export class CatOverlayFilter extends BaseFilter {
     const deltaTime = currentTime - this.lastFrameTime;
     this.lastFrameTime = currentTime;
 
-    // Get parameters
+    // Get parameters from UI controls
     const speed = params.catSpeed || 50;
-    const size = params.catSize || 30;
-
-    // Update cat animations
-    catAnimator.updateCats(width, height, deltaTime);
+    const size = params.catSize || 30; // Update cat animations with current parameters
+    catAnimator.updateCats(width, height, deltaTime, speed, size);
 
     // Draw all cats on top of video
     catAnimator.drawCats(ctx, width, height);
-
-    // Add a simple test rectangle to verify drawing is working
-    ctx.save();
-    ctx.fillStyle = 'rgba(255, 0, 255, 0.7)';
-    ctx.fillRect(50, 50, 100, 50);
-    ctx.fillStyle = 'white';
-    ctx.font = '14px Arial';
-    ctx.fillText('Cat Filter Active!', 55, 75);
-    ctx.restore();
-
-    // Add a visual indicator that the cat filter is active
-    ctx.save();
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-    ctx.font = '12px system-ui';
-    ctx.fillText(`🐱 Cats: ${catAnimator.getCatCount()}`, 10, height - 10);
-    ctx.restore();
 
     // Add cute paw prints occasionally
     if (Math.random() < 0.001) {
