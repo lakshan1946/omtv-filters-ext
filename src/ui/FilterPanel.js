@@ -51,10 +51,19 @@ export class FilterPanel {
       mode: this.panel.querySelector("#omtv-mode"),
       blurRow: this.panel.querySelector("#omtv-blur-row"),
       pixelRow: this.panel.querySelector("#omtv-pixel-row"),
+      bgBlurRow: this.panel.querySelector("#omtv-bg-blur-row"),
+      vintageRow: this.panel.querySelector("#omtv-vintage-row"),
+      edgeRow: this.panel.querySelector("#omtv-edge-row"),
       blur: this.panel.querySelector("#omtv-blur"),
       blurVal: this.panel.querySelector("#omtv-blur-val"),
       pixel: this.panel.querySelector("#omtv-pixel"),
       pixelVal: this.panel.querySelector("#omtv-pixel-val"),
+      bgBlur: this.panel.querySelector("#omtv-bg-blur"),
+      bgBlurVal: this.panel.querySelector("#omtv-bg-blur-val"),
+      vintage: this.panel.querySelector("#omtv-vintage"),
+      vintageVal: this.panel.querySelector("#omtv-vintage-val"),
+      edge: this.panel.querySelector("#omtv-edge"),
+      edgeVal: this.panel.querySelector("#omtv-edge-val"),
     };
   }
 
@@ -62,7 +71,7 @@ export class FilterPanel {
    * Bind event listeners
    */
   bindEvents() {
-    const { enabled, mode, blur, pixel } = this.elements;
+    const { enabled, mode, blur, pixel, bgBlur, vintage, edge } = this.elements;
 
     enabled.addEventListener("change", () => {
       stateManager.set("enabled", enabled.checked);
@@ -84,6 +93,24 @@ export class FilterPanel {
       stateManager.set("pixelSize", value);
       this.elements.pixelVal.textContent = value;
     });
+
+    bgBlur.addEventListener("input", () => {
+      const value = parseInt(bgBlur.value, 10);
+      stateManager.set("backgroundBlurIntensity", value);
+      this.elements.bgBlurVal.textContent = value;
+    });
+
+    vintage.addEventListener("input", () => {
+      const value = parseInt(vintage.value, 10);
+      stateManager.set("vintageIntensity", value);
+      this.elements.vintageVal.textContent = value;
+    });
+
+    edge.addEventListener("input", () => {
+      const value = parseInt(edge.value, 10);
+      stateManager.set("edgeIntensity", value);
+      this.elements.edgeVal.textContent = value;
+    });
   }
 
   /**
@@ -97,6 +124,15 @@ export class FilterPanel {
 
     this.elements.pixelRow.style.display =
       currentFilter === FILTER_TYPES.PIXELATE ? "flex" : "none";
+
+    this.elements.bgBlurRow.style.display =
+      currentFilter === FILTER_TYPES.BACKGROUND_BLUR ? "flex" : "none";
+
+    this.elements.vintageRow.style.display =
+      currentFilter === FILTER_TYPES.VINTAGE ? "flex" : "none";
+
+    this.elements.edgeRow.style.display =
+      currentFilter === FILTER_TYPES.EDGE_ENHANCE ? "flex" : "none";
   }
 
   /**
@@ -113,6 +149,12 @@ export class FilterPanel {
     this.elements.blurVal.textContent = state.blurPx;
     this.elements.pixel.value = state.pixelSize;
     this.elements.pixelVal.textContent = state.pixelSize;
+    this.elements.bgBlur.value = state.backgroundBlurIntensity;
+    this.elements.bgBlurVal.textContent = state.backgroundBlurIntensity;
+    this.elements.vintage.value = state.vintageIntensity;
+    this.elements.vintageVal.textContent = state.vintageIntensity;
+    this.elements.edge.value = state.edgeIntensity;
+    this.elements.edgeVal.textContent = state.edgeIntensity;
 
     this.updateVisibility();
   }

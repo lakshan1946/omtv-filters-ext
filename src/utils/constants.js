@@ -7,12 +7,18 @@ export const FILTER_TYPES = {
   GRAYSCALE: "grayscale",
   BLUR: "blur",
   PIXELATE: "pixelate",
+  BACKGROUND_BLUR: "background_blur",
+  VINTAGE: "vintage",
+  EDGE_ENHANCE: "edge_enhance",
 };
 
 export const DEFAULT_CONFIG = {
   filter: FILTER_TYPES.NONE,
   blurPx: 6,
   pixelSize: 8,
+  backgroundBlurIntensity: 10,
+  vintageIntensity: 70,
+  edgeIntensity: 50,
   enabled: true,
 };
 
@@ -21,10 +27,13 @@ export const UI_CONFIG = {
     id: "omtv-filter-panel",
     position: { right: "16px", bottom: "16px" },
     zIndex: 2147483647,
-    minWidth: "220px",
+    minWidth: "240px",
   },
   blur: { min: 0, max: 20 },
   pixel: { min: 2, max: 40 },
+  backgroundBlur: { min: 0, max: 30 },
+  vintage: { min: 0, max: 100 },
+  edge: { min: 0, max: 100 },
 };
 
 export const CANVAS_CONFIG = {

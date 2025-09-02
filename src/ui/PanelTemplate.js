@@ -36,6 +36,9 @@ export const createPanelTemplate = () => `
         <option value="${FILTER_TYPES.GRAYSCALE}">Grayscale</option>
         <option value="${FILTER_TYPES.BLUR}">Blur</option>
         <option value="${FILTER_TYPES.PIXELATE}">Pixelate</option>
+        <option value="${FILTER_TYPES.BACKGROUND_BLUR}">Background Blur</option>
+        <option value="${FILTER_TYPES.VINTAGE}">Vintage Film</option>
+        <option value="${FILTER_TYPES.EDGE_ENHANCE}">Edge Enhance</option>
       </select>
     </div>
     
@@ -49,6 +52,24 @@ export const createPanelTemplate = () => `
       <span style="min-width:50px;">Pixel</span>
       <input id="omtv-pixel" type="range" min="${UI_CONFIG.pixel.min}" max="${UI_CONFIG.pixel.max}" value="8" style="flex:1;"/>
       <span id="omtv-pixel-val">8</span>
+    </div>
+    
+    <div id="omtv-bg-blur-row" style="display:none;gap:6px;align-items:center;width:100%;">
+      <span style="min-width:50px;">BG Blur</span>
+      <input id="omtv-bg-blur" type="range" min="${UI_CONFIG.backgroundBlur.min}" max="${UI_CONFIG.backgroundBlur.max}" value="10" style="flex:1;"/>
+      <span id="omtv-bg-blur-val">10</span>
+    </div>
+    
+    <div id="omtv-vintage-row" style="display:none;gap:6px;align-items:center;width:100%;">
+      <span style="min-width:50px;">Vintage</span>
+      <input id="omtv-vintage" type="range" min="${UI_CONFIG.vintage.min}" max="${UI_CONFIG.vintage.max}" value="70" style="flex:1;"/>
+      <span id="omtv-vintage-val">70</span>
+    </div>
+    
+    <div id="omtv-edge-row" style="display:none;gap:6px;align-items:center;width:100%;">
+      <span style="min-width:50px;">Edge</span>
+      <input id="omtv-edge" type="range" min="${UI_CONFIG.edge.min}" max="${UI_CONFIG.edge.max}" value="50" style="flex:1;"/>
+      <span id="omtv-edge-val">50</span>
     </div>
   </div>
 `;
