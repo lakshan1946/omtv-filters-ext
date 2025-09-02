@@ -54,6 +54,7 @@ export class FilterPanel {
       bgBlurRow: this.panel.querySelector("#omtv-bg-blur-row"),
       vintageRow: this.panel.querySelector("#omtv-vintage-row"),
       edgeRow: this.panel.querySelector("#omtv-edge-row"),
+      catRow: this.panel.querySelector("#omtv-cat-row"),
       blur: this.panel.querySelector("#omtv-blur"),
       blurVal: this.panel.querySelector("#omtv-blur-val"),
       pixel: this.panel.querySelector("#omtv-pixel"),
@@ -64,6 +65,10 @@ export class FilterPanel {
       vintageVal: this.panel.querySelector("#omtv-vintage-val"),
       edge: this.panel.querySelector("#omtv-edge"),
       edgeVal: this.panel.querySelector("#omtv-edge-val"),
+      catSpeed: this.panel.querySelector("#omtv-cat-speed"),
+      catSpeedVal: this.panel.querySelector("#omtv-cat-speed-val"),
+      catSize: this.panel.querySelector("#omtv-cat-size"),
+      catSizeVal: this.panel.querySelector("#omtv-cat-size-val"),
     };
   }
 
@@ -71,7 +76,17 @@ export class FilterPanel {
    * Bind event listeners
    */
   bindEvents() {
-    const { enabled, mode, blur, pixel, bgBlur, vintage, edge } = this.elements;
+    const {
+      enabled,
+      mode,
+      blur,
+      pixel,
+      bgBlur,
+      vintage,
+      edge,
+      catSpeed,
+      catSize,
+    } = this.elements;
 
     enabled.addEventListener("change", () => {
       stateManager.set("enabled", enabled.checked);
@@ -111,6 +126,18 @@ export class FilterPanel {
       stateManager.set("edgeIntensity", value);
       this.elements.edgeVal.textContent = value;
     });
+
+    catSpeed.addEventListener("input", () => {
+      const value = parseInt(catSpeed.value, 10);
+      stateManager.set("catSpeed", value);
+      this.elements.catSpeedVal.textContent = value;
+    });
+
+    catSize.addEventListener("input", () => {
+      const value = parseInt(catSize.value, 10);
+      stateManager.set("catSize", value);
+      this.elements.catSizeVal.textContent = value;
+    });
   }
 
   /**
@@ -133,6 +160,9 @@ export class FilterPanel {
 
     this.elements.edgeRow.style.display =
       currentFilter === FILTER_TYPES.EDGE_ENHANCE ? "flex" : "none";
+
+    this.elements.catRow.style.display =
+      currentFilter === FILTER_TYPES.CAT_OVERLAY ? "flex" : "none";
   }
 
   /**
@@ -155,6 +185,10 @@ export class FilterPanel {
     this.elements.vintageVal.textContent = state.vintageIntensity;
     this.elements.edge.value = state.edgeIntensity;
     this.elements.edgeVal.textContent = state.edgeIntensity;
+    this.elements.catSpeed.value = state.catSpeed;
+    this.elements.catSpeedVal.textContent = state.catSpeed;
+    this.elements.catSize.value = state.catSize;
+    this.elements.catSizeVal.textContent = state.catSize;
 
     this.updateVisibility();
   }

@@ -10,6 +10,7 @@ export const FILTER_TYPES = {
   BACKGROUND_BLUR: "background_blur",
   VINTAGE: "vintage",
   EDGE_ENHANCE: "edge_enhance",
+  CAT_OVERLAY: "cat_overlay",
 };
 
 export const DEFAULT_CONFIG = {
@@ -19,6 +20,8 @@ export const DEFAULT_CONFIG = {
   backgroundBlurIntensity: 10,
   vintageIntensity: 70,
   edgeIntensity: 50,
+  catSpeed: 50,
+  catSize: 30,
   enabled: true,
 };
 
@@ -34,6 +37,8 @@ export const UI_CONFIG = {
   backgroundBlur: { min: 0, max: 30 },
   vintage: { min: 0, max: 100 },
   edge: { min: 0, max: 100 },
+  catSpeed: { min: 10, max: 100 },
+  catSize: { min: 10, max: 80 },
 };
 
 export const CANVAS_CONFIG = {

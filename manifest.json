@@ -1,8 +1,8 @@
 ﻿{
   "manifest_version": 3,
   "name": "OmeTV Custom Video Filters",
-  "version": "2.1.0",
-  "description": "Apply advanced video filters including background blur, vintage effects, and edge enhancement to OmeTV streams",
+  "version": "2.2.0",
+  "description": "Apply advanced video filters including animated cats, background blur, vintage effects, and edge enhancement to OmeTV streams",
 
   "host_permissions": [
     "*://ome.tv/*",

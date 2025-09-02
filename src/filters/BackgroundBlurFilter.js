@@ -3,6 +3,7 @@ import { simpleBgDetection } from "../utils/simpleBgDetection.js";
 
 /**
  * Background blur filter that blurs only the background while keeping the person sharp
+ * Uses CPU-based detection to avoid external dependencies and CORS issues
  */
 export class BackgroundBlurFilter extends BaseFilter {
   constructor() {
@@ -10,7 +11,7 @@ export class BackgroundBlurFilter extends BaseFilter {
     this.isInitialized = false;
   }
 
-  async apply(ctx, video, width, height, params) {
+  apply(ctx, video, width, height, params) {
     const blurAmount = Math.max(1, params.backgroundBlurIntensity || 10);
 
     if (!this.isInitialized) {

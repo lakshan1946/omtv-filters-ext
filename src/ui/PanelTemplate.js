@@ -39,6 +39,7 @@ export const createPanelTemplate = () => `
         <option value="${FILTER_TYPES.BACKGROUND_BLUR}">Background Blur</option>
         <option value="${FILTER_TYPES.VINTAGE}">Vintage Film</option>
         <option value="${FILTER_TYPES.EDGE_ENHANCE}">Edge Enhance</option>
+        <option value="${FILTER_TYPES.CAT_OVERLAY}">🐱 Cats!</option>
       </select>
     </div>
     
@@ -70,6 +71,19 @@ export const createPanelTemplate = () => `
       <span style="min-width:50px;">Edge</span>
       <input id="omtv-edge" type="range" min="${UI_CONFIG.edge.min}" max="${UI_CONFIG.edge.max}" value="50" style="flex:1;"/>
       <span id="omtv-edge-val">50</span>
+    </div>
+    
+    <div id="omtv-cat-row" style="display:none;gap:4px;align-items:center;width:100%;flex-wrap:wrap;">
+      <div style="display:flex;gap:6px;align-items:center;width:100%;">
+        <span style="min-width:50px;">Speed</span>
+        <input id="omtv-cat-speed" type="range" min="${UI_CONFIG.catSpeed.min}" max="${UI_CONFIG.catSpeed.max}" value="50" style="flex:1;"/>
+        <span id="omtv-cat-speed-val">50</span>
+      </div>
+      <div style="display:flex;gap:6px;align-items:center;width:100%;">
+        <span style="min-width:50px;">Size</span>
+        <input id="omtv-cat-size" type="range" min="${UI_CONFIG.catSize.min}" max="${UI_CONFIG.catSize.max}" value="30" style="flex:1;"/>
+        <span id="omtv-cat-size-val">30</span>
+      </div>
     </div>
   </div>
 `;
