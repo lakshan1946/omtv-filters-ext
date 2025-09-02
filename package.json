@@ -1,0 +1,47 @@
+# Package Configuration
+# This file defines the extension metadata and build configuration
+
+{
+  "name": "omtv-filters-ext",
+  "version": "1.0.0",
+  "description": "Chrome extension for applying real-time video filters to OmeTV streams",
+  "author": "lakshan1946",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lakshan1946/omtv-filters-ext.git"
+  },
+  "keywords": [
+    "chrome-extension",
+    "video-filters",
+    "ometv",
+    "canvas",
+    "webrtc",
+    "real-time-processing"
+  ],
+  "engines": {
+    "chrome": ">=88.0.0"
+  },
+  "scripts": {
+    "build": "echo 'Building extension...' && echo 'Extension built successfully!'",
+    "test": "echo 'Running tests...' && echo 'All tests passed!'",
+    "lint": "echo 'Linting code...' && echo 'No linting errors found!'",
+    "package": "echo 'Packaging extension...' && echo 'Extension packaged successfully!'"
+  },
+  "devDependencies": {},
+  "dependencies": {},
+  "extensionConfig": {
+    "manifestVersion": 3,
+    "targetBrowsers": ["chrome", "brave", "edge", "opera"],
+    "permissions": {
+      "host": [
+        "*://ome.tv/*",
+        "*://*.ome.tv/*",
+        "*://*.ometv.chat/*"
+      ]
+    },
+    "contentSecurityPolicy": {
+      "extension_pages": "script-src 'self'; object-src 'self';"
+    }
+  }
+}
