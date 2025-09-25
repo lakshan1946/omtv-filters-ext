@@ -21,16 +21,10 @@
 
   "web_accessible_resources": [
     {
-      "resources": [
-        "src/main.js",
-        "src/utils/*.js",
-        "src/core/*.js",
-        "src/filters/*.js",
-        "src/ui/*.js"
-      ],
-      "matches": ["<all_urls>"]
+      "resources": ["src/main.js"],
+      "matches": ["*://ome.tv/*", "*://*.ome.tv/*", "*://*.ometv.chat/*"]
     }
   ],
 
-  "permissions": []
+  "permissions": ["activeTab"]
 }
