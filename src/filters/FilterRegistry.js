@@ -6,6 +6,7 @@ import { BackgroundBlurFilter } from "./BackgroundBlurFilter.js";
 import { VintageFilter } from "./VintageFilter.js";
 import { EdgeEnhanceFilter } from "./EdgeEnhanceFilter.js";
 import { CatOverlayFilter } from "./CatOverlayFilter.js";
+import MirrorFilter from "./MirrorFilter.js";
 import { FILTER_TYPES } from "../utils/constants.js";
 
 /**
@@ -29,6 +30,7 @@ class FilterRegistry {
     this.register(FILTER_TYPES.VINTAGE, new VintageFilter());
     this.register(FILTER_TYPES.EDGE_ENHANCE, new EdgeEnhanceFilter());
     this.register(FILTER_TYPES.CAT_OVERLAY, new CatOverlayFilter());
+    this.register(FILTER_TYPES.MIRROR, new MirrorFilter());
   }
 
   /**

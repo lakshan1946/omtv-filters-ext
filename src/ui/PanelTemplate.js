@@ -40,6 +40,7 @@ export const createPanelTemplate = () => `
         <option value="${FILTER_TYPES.VINTAGE}">Vintage Film</option>
         <option value="${FILTER_TYPES.EDGE_ENHANCE}">Edge Enhance</option>
         <option value="${FILTER_TYPES.CAT_OVERLAY}">🐱 Cats!</option>
+        <option value="${FILTER_TYPES.MIRROR}">Mirror</option>
       </select>
     </div>
     

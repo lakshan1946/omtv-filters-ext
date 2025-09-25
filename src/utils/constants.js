@@ -11,6 +11,7 @@ export const FILTER_TYPES = {
   VINTAGE: "vintage",
   EDGE_ENHANCE: "edge_enhance",
   CAT_OVERLAY: "cat_overlay",
+  MIRROR: "mirror",
 };
 
 export const DEFAULT_CONFIG = {

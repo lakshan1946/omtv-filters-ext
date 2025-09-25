@@ -163,6 +163,7 @@ export class FilterPanel {
 
     this.elements.catRow.style.display =
       currentFilter === FILTER_TYPES.CAT_OVERLAY ? "flex" : "none";
+    // Mirror filter has no extra controls, so all rows should be hidden
   }
 
   /**
