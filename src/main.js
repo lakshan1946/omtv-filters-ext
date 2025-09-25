@@ -396,6 +396,32 @@
 
       this.panel.appendChild(toggleBtn);
 
+      // Add hide panel button
+      const hideBtn = document.createElement("button");
+      hideBtn.textContent = "Hide Panel";
+      hideBtn.style.cssText = `
+        display: block;
+        width: 100%;
+        margin: 5px 0;
+        padding: 6px;
+        background: #444;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 12px;
+        transition: background 0.2s;
+      `;
+
+      hideBtn.addEventListener("click", () => this.hide());
+      hideBtn.addEventListener("mouseenter", () => {
+        hideBtn.style.background = "#555";
+      });
+      hideBtn.addEventListener("mouseleave", () => {
+        hideBtn.style.background = "#444";
+      });
+      this.panel.appendChild(hideBtn);
+
       // Add close button
       const closeBtn = document.createElement("button");
       closeBtn.textContent = "×";
@@ -408,8 +434,16 @@
         color: white;
         font-size: 18px;
         cursor: pointer;
+        opacity: 0.7;
+        transition: opacity 0.2s;
       `;
       closeBtn.addEventListener("click", () => this.toggle());
+      closeBtn.addEventListener("mouseenter", () => {
+        closeBtn.style.opacity = "1";
+      });
+      closeBtn.addEventListener("mouseleave", () => {
+        closeBtn.style.opacity = "0.7";
+      });
       this.panel.appendChild(closeBtn);
 
       document.body.appendChild(this.panel);
@@ -434,10 +468,80 @@
       });
     }
 
+    hide() {
+      if (this.panel && this.isVisible) {
+        this.panel.style.display = "none";
+        this.isVisible = false;
+        this.createShowButton();
+        console.log("[OmeTV Filters] Panel hidden");
+      }
+    }
+
+    show() {
+      if (this.panel && !this.isVisible) {
+        this.panel.style.display = "block";
+        this.isVisible = true;
+        this.removeShowButton();
+        console.log("[OmeTV Filters] Panel shown");
+      }
+    }
+
     toggle() {
       if (this.panel) {
-        this.panel.style.display = this.isVisible ? "none" : "block";
-        this.isVisible = !this.isVisible;
+        if (this.isVisible) {
+          this.hide();
+        } else {
+          this.show();
+        }
+      }
+    }
+
+    createShowButton() {
+      // Remove existing show button if any
+      this.removeShowButton();
+
+      const showBtn = document.createElement("button");
+      showBtn.id = "omtv-show-panel-btn";
+      showBtn.textContent = "🎥";
+      showBtn.title = "Show OmeTV Filters Panel (Press F for toggle)";
+      showBtn.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+        background: rgba(0, 0, 0, 0.8);
+        color: white;
+        border: 2px solid #007acc;
+        border-radius: 50%;
+        cursor: pointer;
+        z-index: 2147483646;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(5px);
+        transition: all 0.2s;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      `;
+
+      showBtn.addEventListener("click", () => this.show());
+      showBtn.addEventListener("mouseenter", () => {
+        showBtn.style.transform = "scale(1.1)";
+        showBtn.style.background = "rgba(0, 122, 204, 0.9)";
+      });
+      showBtn.addEventListener("mouseleave", () => {
+        showBtn.style.transform = "scale(1)";
+        showBtn.style.background = "rgba(0, 0, 0, 0.8)";
+      });
+
+      document.body.appendChild(showBtn);
+    }
+
+    removeShowButton() {
+      const existingBtn = document.getElementById("omtv-show-panel-btn");
+      if (existingBtn) {
+        existingBtn.remove();
       }
     }
 
@@ -447,6 +551,7 @@
         this.panel = null;
         this.isVisible = false;
       }
+      this.removeShowButton();
     }
   }
 
@@ -491,7 +596,28 @@
       setTimeout(() => {
         this.panel = new FilterPanel();
         this.panel.create();
+        this.setupKeyboardShortcuts();
       }, 2000);
+    }
+
+    setupKeyboardShortcuts() {
+      // Add keyboard shortcut for panel toggle (F key)
+      document.addEventListener("keydown", (event) => {
+        // Check if F key is pressed and no input element is focused
+        if (event.key === "f" || event.key === "F") {
+          const activeElement = document.activeElement;
+          const isInputFocused =
+            activeElement &&
+            (activeElement.tagName === "INPUT" ||
+              activeElement.tagName === "TEXTAREA" ||
+              activeElement.contentEditable === "true");
+
+          if (!isInputFocused && this.panel) {
+            event.preventDefault();
+            this.panel.toggle();
+          }
+        }
+      });
     }
 
     cleanup() {
